@@ -93,4 +93,27 @@ const loginUser = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { registerUser, loginUser };
+const getuserprofile = asyncHandler(async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({
+      email: user.email,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      age: user.age,
+      blood_group: user.blood_group,
+      gender: user.gender,
+      phone_number: user.phone_number
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+module.exports = { registerUser, loginUser, getuserprofile };
